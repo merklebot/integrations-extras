@@ -1,1 +1,2 @@
 metric_name,metric_type,interval,unit_name,per_unit_name,description,orientation,integration,short_name,curated_metric
+bosdyn_spot.battery_states.0.charge_percentage,gauge,,percent,,,0,bosdyn_spot,battery_charge_percentage,
