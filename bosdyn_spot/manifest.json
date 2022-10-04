@@ -8,8 +8,8 @@
     "configuration": "README.md#Setup",
     "support": "README.md#Support",
     "changelog": "CHANGELOG.md",
-    "description": "",
-    "title": "bosdyn_spot",
+    "description": "An integration for Boston Dynamics Spot robot",
+    "title": "Boston Dynamics Spot",
     "media": [],
     "classifier_tags": [
       "Supported OS::Linux",
