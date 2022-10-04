@@ -7,4 +7,19 @@ files:
     - template: init_config/default
   - template: instances
     options:
+    - name: spot_address
+      required: true
+      description: Spot gRPC API server IP address
+      value:
+        type: string
+        example: 192.168.50.3
+    - name: spot_user
+      required: true
+      description: User to authenticate on Spot gRPC API server
+      value:
+        type: string
+        example: admin
+    - name: spot_password
+      requred: true
+      description: Password for the Spot gRPC API server user
     - template: instances/default

@@ -13,7 +13,20 @@ init_config:
 #
 instances:
 
-  -
+    ## @param spot_address - string - required
+    ## Spot gRPC API server IP address
+    #
+  - spot_address: 192.168.50.3
+
+    ## @param spot_user - string - required
+    ## User to authenticate on Spot gRPC API server
+    #
+    spot_user: admin
+
+    ## Password for the Spot gRPC API server user
+    #
+    # spot_password: {}
+
     ## @param tags - list of strings - optional
     ## A list of tags to attach to every metric and service check emitted by this instance.
     ##
@@ -42,3 +55,14 @@ instances:
     ## This is useful for cluster-level checks.
     #
     # empty_default_hostname: false
+
+    ## @param metric_patterns - mapping - optional
+    ## A mapping of metrics to include or exclude, with each entry being a regular expression.
+    ##
+    ## Metrics defined in `exclude` will take precedence in case of overlap.
+    #
+    # metric_patterns:
+    #   include:
+    #   - <INCLUDE_REGEX>
+    #   exclude:
+    #   - <EXCLUDE_REGEX>
