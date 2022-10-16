@@ -1,8 +1,9 @@
 import bosdyn.client
 from bosdyn.client.robot_state import RobotStateClient
+from datadog_checks.base import AgentCheck, ConfigurationError
 
-from datadog_checks.base import AgentCheck
-
+from bosdyn.client.exceptions import UnableToConnectToRobotError
+from bosdyn.client.auth import InvalidLoginError
 
 class BosdynSpotCheck(AgentCheck):
     __NAMESPACE__ = 'bosdyn_spot'
@@ -23,10 +24,24 @@ class BosdynSpotCheck(AgentCheck):
     def check(self, _):
         try:
             self._ensure_spot_conn()
+        except InvalidLoginError as e:
+            self.service_check("can_connect", AgentCheck.CRITICAL, message=str(e))
+            raise ConfigurationError('Invalid Credentials, please, fix configuration')
+
         except Exception as e:
+            # import traceback
+            # traceback.print_exc()
             self.service_check("can_connect", AgentCheck.CRITICAL, message=str(e))
             return
-        self.service_check("can_connect", AgentCheck.OK)
 
-        state = self.spot_state_client.get_robot_state()
-        self.gauge("battery_states.0.charge_percentage", state.battery_states[0].charge_percentage.value)
+        try:
+            self.service_check("can_connect", AgentCheck.OK)
+            state = self.spot_state_client.get_robot_state()
+            metrics = self.spot_state_client.get_robot_metrics()
+            self.gauge("battery_states.0.charge_percentage", state.battery_states[0].charge_percentage.value)
+            for metric in metrics.metrics:
+                if metric.label == "distance":
+                    self.gauge("metrics.distance_m", metric.float_value)
+                break
+        except Exception as e:
+            self.service_check("can_connect", AgentCheck.CRITICAL, message=str(e))
